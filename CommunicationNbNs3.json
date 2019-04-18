@@ -1,0 +1,123 @@
+{
+  "ApplicationName": "MensajesPrime",
+  "DisplayName": "Mensajes PLC PRIME",
+  "Description": "Aplicación en la que un nodo base envía una solicitud y un nodo de servicio responde",
+  "ApplicationRoles": [
+    {
+      "Name": "BaseNode",
+      "Description": "nodo base que envía una solicitud."
+    },
+    {
+      "Name": "ServiceNode",
+      "Description": "nodo de servicio que responde a la solicitud"
+    }
+  ],
+  "Workflows": [
+    {
+      "Name": "MensajesPrime",
+      "DisplayName": "Request Response",
+      "Description": "flujo de trabajo en el que un nodo base envía una solicitud y un nodo de servicio responde",
+      "Initiators": [ "BaseNode" ],
+      "StartState": "Request",
+      "Properties": [
+        {
+          "Name": "State",
+          "DisplayName": "State",
+          "Description": "Holds the state of the contract.",
+          "Type": {
+            "Name": "state"
+          }
+        },
+        {
+          "Name": "BaseNode",
+          "DisplayName": "Base Node",
+          "Description": "Nodo enviando una solicitud.",
+          "Type": {
+            "Name": "BaseNode"
+          }
+        },
+        {
+          "Name": "ServiceNode",
+          "DisplayName": "Service Node",
+          "Description": "Nodo enviando una respuesta.",
+          "Type": {
+            "Name": "ServiceNode"
+          }
+        },
+        {
+          "Name": "ResponseMessage",
+          "DisplayName": "Response Message",
+          "Description": "Cantidad de energía medida por el Service Node.",
+          "Type": {
+            "Name": "int"
+          }
+        }
+      ],
+      "Constructor": {
+        "Parameters": [
+        ]
+      },
+      "Functions": [
+        {
+          "Name": "SendRequest",
+          "DisplayName": "Request",
+          "Description": "El nodo base envía una solicitud al nodo de servicio",
+          "Parameters": []
+        },
+        {
+          "Name": "SendResponse",
+          "DisplayName": "Response",
+          "Description": "El nodo de servicio contesta",
+          "Parameters": [
+            {
+              "Name": "responseMessage",
+              "Description": "El nodo de servicio responde con sus medidas",
+              "DisplayName": "Response",
+              "Type": {
+                "Name": "int"
+              }
+            }
+          ]
+        }
+      ],
+      "States": [
+        {
+          "Name": "Request",
+          "DisplayName": "Solicitud enviada",
+          "Description": "...",
+          "PercentComplete": 50,
+          "Value": 0,
+          "Style": "Success",
+          "Transitions": [
+            {
+              "AllowedRoles": ["ServiceNode"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "SendResponse",
+              "NextStates": [ "Respond" ],
+              "DisplayName": "Send Response"
+            }
+          ]
+        },
+        {
+          "Name": "Respond",
+          "DisplayName": "Respuesta enviada",
+          "Description": "...",
+          "PercentComplete": 100,
+          "Value": 1,
+          "Style": "Success",
+          "Transitions": [
+            {
+              "AllowedRoles": [],
+              "AllowedInstanceRoles": ["BaseNode"],
+              "Description": "...",
+              "Function": "SendRequest",
+              "NextStates": [ "Request" ],
+              "DisplayName": "Send Request"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
